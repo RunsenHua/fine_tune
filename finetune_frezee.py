@@ -1,4 +1,21 @@
+from transformers.integrations import TensorBoardCallback
+from torch.utils.tensorboard import SummaryWriter
+from transformers import TrainingArguments
+from transformers import Trainer, HfArgumentParser
+from transformers import AutoTokenizer, AutoModel
+import torch
+import torch.nn as nn
+from peft import get_peft_model, LoraConfig, TaskType
+from dataclasses import dataclass, field
+import datasets
+import os
 
+
+tokenizer = AutoTokenizer.from_pretrained("E:\code\chatglm\chatglm2", trust_remote_code=True)
+
+
+@dataclass
+class FinetuneArguments:
     dataset_path: str = field(default="data/alpaca")
     model_path: str = field(default="output")
     lora_rank: int = field(default=8)
@@ -111,3 +128,10 @@ def main():
         data_collator=data_collator,
     )
     trainer.train()
+    writer.close()
+    # save model
+    model.save_pretrained(training_args.output_dir)
+
+
+if __name__ == "__main__":
+    main()
