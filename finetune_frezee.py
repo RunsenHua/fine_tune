@@ -109,7 +109,7 @@ def main():
     for i,p in enumerate(model.parameters()):
         print (p)
         #把前面所有的层数都给冻结住
-        if layer_num-2:
+        if i<layer_num-2:
             #冻结可调参数
             p.requires_grad = False
             freeze_para+=mul(p.shape)
